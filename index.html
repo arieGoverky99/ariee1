@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Monitoring Kandang Ayam</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #121826;
+      color: #e1e1e1;
+      padding: 1.5rem;
+    }
+    .card {
+      background: #1c2133;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgb(124 58 237 / 0.6);
+      padding: 1.5rem;
+    }
+    .glow-yellow {
+      background: #1c2133;
+      box-shadow:
+        0 0 18px rgb(252 211 77 / 0.8),
+        inset 0 0 10px rgb(252 211 77 / 0.8);
+      color: #fcd34d;
+    }
+    .status-ideal {
+      color: #22c55e;
+      font-weight: 700;
+    }
+    .status-on {
+      color: #22c55e;
+      font-weight: 700;
+    }
+    .status-off {
+      color: #a1a1aa;
+      font-weight: 600;
+    }
+    .btn-control {
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 0.75rem;
+      padding: 0.4rem 1rem;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
+      transition: all 0.3s ease;
+      user-select: none;
+      border: none;
+    }
+    .btn-fan {
+      background: linear-gradient(90deg, #fb5607, #ff006e);
+      color: white;
+    }
+    .btn-pump {
+      background: linear-gradient(90deg, #22d3ee, #0284c7);
+      color: white;
+    }
+    .btn-feed {
+      background: linear-gradient(90deg, #facc15, #fbbf24);
+      color: #444028;
+    }
+    .btn-control:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+<body class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <main class="lg:col-span-2 space-y-8">
+    <header class="bg-[#1c2133] rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-20 h-20 flex justify-center items-center bg-yellow-500 rounded-full shadow-lg shrink-0">
+          <img
+            src="d839459dd71b680e3f8b530d8d79fc16-removebg-preview.png"
+            alt="Logo kartun ayam"
+            class="w-16 h-16"
+          />
+        </div>
+        <div>
+          <h1 class="text-yellow-400 text-xl font-extrabold mb-1 leading-tight uppercase tracking-wide">
+            DASHBOARD MONITORING KANDANG AYAM
+          </h1>
+          <p class="text-sm text-cyan-400 font-semibold">
+            Selamat Datang! <span class="font-extrabold">Ayam Sehat, Telurpun Lezat!</span>
+          </p>
+        </div>
+      </div>
+      <time class="text-4xl font-extrabold tracking-wider tabular-nums select-text" aria-live="polite" id="time-display">--:--:--</time>
+    </header>
+
+    <section>
+      <h2 class="text-white font-semibold text-lg mb-4">Kandangku</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <article class="card flex flex-col gap-0.5">
+          <span class="text-purple-500 text-2xl">💡</span>
+          <p class="text-sm text-white font-semibold">Jumlah Ayam</p>
+          <p class="text-3xl font-extrabold">3200 <span class="text-base font-medium">ekor</span></p>
+        </article>
+        <article class="card flex flex-col gap-0.5">
+          <span class="text-purple-500 text-2xl">🍗</span>
+          <p class="text-sm text-white font-semibold">Jumlah Pakan</p>
+          <p class="text-3xl font-extrabold">510 <span class="text-base font-medium">Kg</span></p>
+        </article>
+        <article class="card flex flex-col gap-0.5">
+          <span class="text-purple-500 text-2xl">💧</span>
+          <p class="text-sm text-white font-semibold">Air Minum</p>
+          <p class="text-3xl font-extrabold">180 <span class="text-base font-medium">L</span></p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="card p-6 flex flex-col gap-2 glow-yellow">
+          <p class="font-semibold flex items-center gap-2">
+            <span class="text-purple-500">💡</span> Intensitas Cahaya
+          </p>
+          <p class="text-3xl font-bold">48699 Lux</p>
+          <p class="text-sm">
+            Status Lampu: <span class="font-extrabold text-green-400">MENYALA</span> <span class="text-2xl">☀</span>
+          </p>
+        </div>
+        <div class="card p-6 flex flex-col gap-2">
+          <p class="font-semibold flex items-center gap-2 text-gray-300">
+            <span class="text-purple-500">🏔</span> Ketinggian Lokasi
+          </p>
+          <p class="text-3xl font-bold">452.8 <span class="text-base font-medium">mdpl</span></p>
+          <p class="text-sm text-gray-400">Dari permukaan laut</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="card p-8 flex flex-col items-center text-center">
+        <p class="font-bold text-lg flex items-center gap-2 mb-2">
+          <span class="text-red-600">🌡</span> Suhu Kandang
+        </p>
+        <p class="status-ideal mb-1 text-xl uppercase">Status: IDEAL</p>
+        <p class="text-6xl font-extrabold">27.6<span class="text-3xl align-top">°C</span></p>
+        <div role="progressbar" aria-valuenow="27.6" aria-valuemin="24" aria-valuemax="30" class="w-full mt-5 mb-2 h-2 rounded-full bg-[#2c2f48] overflow-hidden">
+          <div class="h-full bg-green-500" style="width: 70%"></div>
+        </div>
+        <p class="text-xs text-gray-400">Rekomendasi: 24–30°C untuk ayam petelur</p>
+      </div>
+    </section>
+  </main>
+
+  <aside class="space-y-8">
+    <section class="card">
+      <h2 class="text-white font-semibold text-lg mb-4">Grafik Suhu & Kelembapan</h2>
+      <div class="space-y-4">
+        <div class="bg-[#2c2f48] rounded-lg p-2">
+          <canvas id="suhuChart"></canvas>
+        </div>
+        <div class="bg-[#2c2f48] rounded-lg p-2">
+          <canvas id="kelembapanChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="text-white font-semibold text-lg mb-4">Kontrol Peralatan</h2>
+
+      <div class="space-y-4">
+        <button id="btn-fan" class="btn-control btn-fan w-full flex justify-between items-center" aria-pressed="false" aria-label="Kontrol Kipas">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">🌀</span>
+            <div class="text-left">
+              <p class="font-semibold text-lg text-white">Kipas</p>
+              <p>Status: <span id="status-fan" class="status-off">Mati</span></p>
+            </div>
+          </div>
+          <span id="label-fan" class="text-sm font-semibold tracking-wide">Nyalakan</span>
+        </button>
+
+        <button id="btn-pump" class="btn-control btn-pump w-full flex justify-between items-center" aria-pressed="false" aria-label="Kontrol Pompa">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">💧</span>
+            <div class="text-left">
+              <p class="font-semibold text-lg text-white">Pompa</p>
+              <p>Status: <span id="status-pump" class="status-off">Mati</span></p>
+            </div>
+          </div>
+          <span id="label-pump" class="text-sm font-semibold tracking-wide">Nyalakan</span>
+        </button>
+
+        <button id="btn-feed" class="btn-control btn-feed w-full flex justify-between items-center" aria-pressed="false" aria-label="Kontrol Pakan">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">🍽</span>
+            <div class="text-left">
+              <p class="font-semibold text-lg text-[#444028]">Pakan</p>
+              <p>Status: <span id="status-feed" class="status-off">Mati</span></p>
+            </div>
+          </div>
+          <span id="label-feed" class="text-sm font-semibold tracking-wide">Nyalakan</span>
+        </button>
+      </div>
+    </section>
+  </aside>
+
+  <script>
+    // Update real time clock every second
+    function updateTime() {
+      const timeDisplay = document.getElementById('time-display');
+      const now = new Date();
+      const options = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      timeDisplay.textContent = now.toLocaleTimeString('id-ID', options);
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // Control Buttons Logic (Toggle On/Off)
+    const controls = [
+      { btnId: 'btn-fan', statusId: 'status-fan', labelId: 'label-fan' },
+      { btnId: 'btn-pump', statusId: 'status-pump', labelId: 'label-pump' },
+      { btnId: 'btn-feed', statusId: 'status-feed', labelId: 'label-feed' }
+    ];
+
+    controls.forEach(({ btnId, statusId, labelId }) => {
+      const btn = document.getElementById(btnId);
+      const status = document.getElementById(statusId);
+      const label = document.getElementById(labelId);
+      btn.addEventListener('click', () => {
+        const isPressed = btn.getAttribute('aria-pressed') === 'true';
+        btn.setAttribute('aria-pressed', !isPressed);
+
+        if (!isPressed) {
+          status.textContent = 'Hidup';
+          status.classList.remove('status-off');
+          status.classList.add('status-on');
+          label.textContent = 'Matikan';
+        } else {
+          status.textContent = 'Mati';
+          status.classList.remove('status-on');
+          status.classList.add('status-off');
+          label.textContent = 'Nyalakan';
+        }
+      });
+    });
+
+    // Chart.js Graphs
+    // Data fiktif untuk grafik
+    const labels = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00'];
+    const suhuData = [27, 28, 29, 28, 27.5, 27];
+    const kelembapanData = [65, 68, 70, 69, 67, 65];
+
+    // Konfigurasi Chart Suhu
+    const suhuConfig = {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Suhu (°C)',
+          data: suhuData,
+          borderColor: '#fcd34d',
+          backgroundColor: 'rgba(252, 211, 77, 0.2)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: '#e1e1e1'
+            }
+          },
+          title: {
+            display: true,
+            text: 'Grafik Suhu',
+            color: '#e1e1e1'
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Waktu',
+              color: '#e1e1e1'
+            },
+            ticks: { color: '#a1a1aa' },
+            grid: { color: '#2c2f48' }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Suhu (°C)',
+              color: '#e1e1e1'
+            },
+            ticks: { color: '#a1a1aa' },
+            grid: { color: '#2c2f48' }
+          }
+        }
+      }
+    };
+    new Chart(document.getElementById('suhuChart'), suhuConfig);
+
+    // Konfigurasi Chart Kelembapan
+    const kelembapanConfig = {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Kelembapan (%)',
+          data: kelembapanData,
+          borderColor: '#22d3ee',
+          backgroundColor: 'rgba(34, 211, 238, 0.2)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: '#e1e1e1'
+            }
+          },
+          title: {
+            display: true,
+            text: 'Grafik Kelembapan',
+            color: '#e1e1e1'
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Waktu',
+              color: '#e1e1e1'
+            },
+            ticks: { color: '#a1a1aa' },
+            grid: { color: '#2c2f48' }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Kelembapan (%)',
+              color: '#e1e1e1'
+            },
+            ticks: { color: '#a1a1aa' },
+            grid: { color: '#2c2f48' }
+          }
+        }
+      }
+    };
+    new Chart(document.getElementById('kelembapanChart'), kelembapanConfig);
+  </script>
+</body>
+</html>
